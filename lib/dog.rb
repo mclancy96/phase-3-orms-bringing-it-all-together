@@ -39,4 +39,16 @@ class Dog
     dog.save
     dog
   end
+
+  def self.new_from_db(data)
+    Dog.new(id: data[0], name: data[1], breed: data[2])
+  end
+
+  def self.all
+    sql = <<-SQL
+      SELECT * from dogs;
+    SQL
+    dogs = DB[:conn].execute(sql)
+    dogs.map { |dog| Dog.new_from_db(dog) }
+  end
 end
